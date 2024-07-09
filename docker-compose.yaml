@@ -1,0 +1,34 @@
+version: '3'
+services:
+  bytebase:
+    image: bytebase/bytebase:2.20.0
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_URL=postgresql://bytebase:openpostgresql@bytebasedb:5432/bytebase
+    volumes:
+      - ./bytebase-data:/data
+    depends_on:
+      bytebasedb:
+        condition: service_healthy
+    networks:
+      bytebase_network:
+  bytebasedb:
+    image: postgres:15.4
+    restart: on-failure:3
+    networks:
+      bytebase_network:
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_PASSWORD=openpostgresql
+      - POSTGRES_USER=bytebase
+      - POSTGRES_DB=bytebase
+      - PGUSER=bytebase
+networks:
+  bytebase_network:
