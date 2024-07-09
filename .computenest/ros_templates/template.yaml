@@ -183,11 +183,7 @@ Outputs:
       zh-cn: 访问页面。
     Value:
       Fn::Sub:
-<<<<<<< HEAD
         - 'http://${ServerAddress}:8080'
-=======
-        - 'http://${ServerAddress}:80'
->>>>>>> 0f0aee5b821ff3251c10794b1fe58aab2d76a712
         - ServerAddress:
             Fn::Select:
             - 0
