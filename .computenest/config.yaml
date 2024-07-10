@@ -3,7 +3,7 @@ Service:
   DeployType: ros
   DeployMetadata:
     ServiceInstanceNameRule:
-      Prefix: halo
+      Prefix: bytebase
     SupplierDeployMetadata:
       ArtifactRelation:
         'centos_7_9_x64_20G_alibase_20240403.vhd':
@@ -45,13 +45,13 @@ Service:
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
-    ShortDescription: halo deploy
+    ShortDescription: bytebase deploy
     Image: 'resources/icons/service_logo.png'
 Artifact:
   EcsImage:
     ArtifactType: EcsImage
-    ArtifactName: halo
-    Description: halo
+    ArtifactName: bytebase
+    Description: bytebase
     ArtifactProperty:
       RegionId: ${ImageBuilder.EcsImage.RegionId}
       ImageId: ${ImageBuilder.EcsImage.SourceImageId}
