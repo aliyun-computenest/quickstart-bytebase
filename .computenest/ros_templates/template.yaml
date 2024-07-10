@@ -1,7 +1,7 @@
 ROSTemplateFormatVersion: '2015-09-01'
 Description:
-  en: Source Code Service Ros Template
-  zh-cn: 源代码服务模板
+  en: DockerCompose service template
+  zh-cn: DockerCompose服务模板
 Parameters:
   PayType:
     Type: String
@@ -106,11 +106,6 @@ Parameters:
     AssociationPropertyMetadata:
       VpcId: VpcId
       ZoneId: ZoneId
-  AdminPassword:
-    Type: String
-    AssociationProperty: ALIYUN::ECS::Instance::Password
-    Label: 管理员密码
-    NoEcho: True
 Resources:
   SecurityGroup:
     Type: ALIYUN::ECS::SecurityGroup
@@ -143,7 +138,7 @@ Resources:
         Ref: ZoneId
       SecurityGroupId:
         Ref: SecurityGroup
-      ImageId: centos_7_9_x64_20G_alibase_20230613.vhd
+      ImageId: centos_7_9_x64_20G_alibase_20240403.vhd
       Password:
         Ref: InstancePassword
       InstanceType:
@@ -166,13 +161,8 @@ Resources:
       CommandContent:
         Fn::Sub:
           - |
-            #!/bin/bash
-            # 源代码通过computenest-cli被打包为tar.gz包，并发布为部署物
-            wget '{{ computenest::file::aliyun-computenest_quickstart-bytebase }}' -O aliyun-computenest_quickstart-bytebase.tar.gz > /var/log/download.log
-            tar -zxvf aliyun-computenest_quickstart-bytebase.tar.gz && cd "$(tar -tzf aliyun-computenest_quickstart-bytebase.tar.gz | head -1 | awk -F'/' '{print $1}')"
-            echo "start run command"
-            echo "${AdminPassword}"
-
+            systemctl start bytebase
+            sleep 10
             ARGUS_VERSION=3.5.7 /bin/bash -c "$(curl -sS https://cms-agent-${RegionId}.oss-${RegionId}-internal.aliyuncs.com/Argus/agent_install_ecs-1.7.sh)" >> /root/install_cms_agent.log 2>&1
           - RegionId:
               Ref: ALIYUN::Region
@@ -183,11 +173,7 @@ Outputs:
       zh-cn: 访问页面。
     Value:
       Fn::Sub:
-<<<<<<< HEAD
         - 'http://${ServerAddress}:8080'
-=======
-        - 'http://${ServerAddress}:80'
->>>>>>> 0f0aee5b821ff3251c10794b1fe58aab2d76a712
         - ServerAddress:
             Fn::Select:
             - 0
@@ -214,9 +200,4 @@ Metadata:
           - VSwitchId
         Label:
           default: 可用区配置
-      - Parameters:
-          - AdminPassword
-        Label:
-          en: Software Configuration
-          zh-cn: 软件配置
       
