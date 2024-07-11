@@ -105,7 +105,7 @@ ImageBuilder:
 
       cd /root/
       git clone https://github.com/aliyun-computenest/quickstart-bytebase
-      cd quickstart-halo
+      cd quickstart-bytebase
       docker compose up -d
       sleep 300
       docker compose down
